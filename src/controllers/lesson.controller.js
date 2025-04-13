@@ -15,6 +15,7 @@ const createLesson = asyncHandler(async (req,res)=>{
         throw new ApiError(400,"Invalid course Id");
     }
     const videoPath =  req.file?.path
+    console.log("multer:",req.file?.path)
     if(!videoPath){
         throw new ApiError(400,"your video did not upload! try again")
     }
