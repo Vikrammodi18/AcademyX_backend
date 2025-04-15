@@ -108,6 +108,7 @@ const updateThumbnail = asyncHandler(async (req,res)=>{
         new ApiResponse(200,course,"thumbnail updated successfully!!")
     )
 })
+// getting whole course
 const getAllCourse = asyncHandler(async (req,res)=>{
     
     const allCourses = await Course.aggregate([
@@ -146,6 +147,7 @@ const getAllCourse = asyncHandler(async (req,res)=>{
         )
     )
 })
+//getting specific course by Id
 const getCourseById = asyncHandler(async (req,res)=>{
     const{courseId} = req.params
 
@@ -171,10 +173,35 @@ const getCourseById = asyncHandler(async (req,res)=>{
         new ApiResponse(200,course,"successfully")
     )
 })
+//getting course by category
+const courseCategory = asyncHandler(async(req,res)=>{
+    const {category} = req.query;
+   
+    const course = await Course.find({category:category})
+                    .select("-content")
+                    .populate("educator","profileImage username")
+    
+    if(!course){
+        throw new ApiError(404,"No course found!!")
+    }
+    if(course.length === 0){
+        return res
+        .status(200)
+        .json(
+            new ApiResponse(200,{},"No Courses Available")
+        )
+    }
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(200,course,`${category}:fetched successfully`)
+    )
+})
 module.exports = {
     createCourse,
     updateCourse,
     updateThumbnail,
     getAllCourse,
-    getCourseById
+    getCourseById,
+    courseCategory
 }

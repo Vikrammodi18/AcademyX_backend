@@ -6,10 +6,12 @@ const {
     updateCourse,
     updateThumbnail,
     getAllCourse,
-    getCourseById
+    getCourseById,
+    courseCategory
 } = require("../controllers/course.controller")
 const router = Router()
 
+router.route("/").get(courseCategory)
 router.route("/allCourses").get(getAllCourse)
 router.route("/:courseId").get(getCourseById)
 
