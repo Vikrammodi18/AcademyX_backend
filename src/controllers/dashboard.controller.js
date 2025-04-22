@@ -2,11 +2,16 @@ const ApiError = require("../utils/apiError")
 const asyncHandler = require("../utils/asyncHandler") 
 const User = require("../models/user.model")
 const mongoose = require("mongoose")
+const Enrollment = require("../models/enrollment.model")
 const userEnrolledCourse = asyncHandler(async (req,res)=>{
     //student dashboard
     const userId = req?.user?._id
     if(!userId){
         throw ApiError(403,"user Id is required")
+    }
+    const enrolled = await Enrollment.findOne({student: userId})
+    if(!enrolled){
+        throw new ApiError(404,"user did not enrolled any course")
     }
     const enrolledCourse = await User.aggregate([
         {
