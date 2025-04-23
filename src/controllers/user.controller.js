@@ -111,7 +111,7 @@ const logoutUser = asyncHandler(async (req,res)=>{
         },
         {new:true}
     )
-    // console.log("cookies:",req?.cookies)
+    
     return res
     .status(200)
     .clearCookie("refreshToken",options)
@@ -135,7 +135,7 @@ const uploadProfileImage = asyncHandler(async (req,res)=>{
     throw new ApiError(500,"unable to update profile image")
 
    }
-   console.log(upload.url)
+   
    const user = await User.findById(req.user?._id)
    user.profileImage = upload.url
    user.save({validateBeforeSave:false})

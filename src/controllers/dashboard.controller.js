@@ -4,6 +4,8 @@ const User = require("../models/user.model")
 const mongoose = require("mongoose")
 const Enrollment = require("../models/enrollment.model")
 const ApiResponse = require("../utils/apiResponse")
+const Course = require("../models/course.model")
+
 const userEnrolledCourse = asyncHandler(async (req,res)=>{
     //student dashboard
     const userId = req?.user?._id
@@ -27,7 +29,6 @@ const userEnrolledCourse = asyncHandler(async (req,res)=>{
             _id: new mongoose.Types.ObjectId(userId) 
            }
         },
-        
         {
             $lookup:{
                 from:"enrollments",
@@ -68,6 +69,26 @@ const userEnrolledCourse = asyncHandler(async (req,res)=>{
 
 })
 
+const educatorDashboard = asyncHandler(async(req,res)=>{
+    
+    const userId = req?.user?._id
+    if(!userId){
+        throw new ApiError(403,"user is not logged In")
+    }
+
+    const course = await Course.find({
+        educator: new mongoose.Types.ObjectId(userId)
+    }).select("-educator -content")
+   
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(200,course,course.length?"your all course fetched sucessfully":"No course found for this educator.")
+    )
+    
+})
+
 module.exports = {
-    userEnrolledCourse
+    userEnrolledCourse,
+    educatorDashboard
 }
