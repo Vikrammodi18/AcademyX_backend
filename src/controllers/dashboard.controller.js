@@ -69,6 +69,7 @@ const userEnrolledCourse = asyncHandler(async (req,res)=>{
 
 })
 
+//educator dashboard
 const educatorDashboard = asyncHandler(async(req,res)=>{
     
     const userId = req?.user?._id
