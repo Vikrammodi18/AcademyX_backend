@@ -8,7 +8,8 @@ const {mongoose,isValidObjectId} = require("mongoose")
 
 const options = {
     httpOnly:true,
-    secure:false
+    secure:false,
+    maxAge:7*24*60*60*1000
 }
 const genereateRefreshAndAccessToken = async (userId)=>{
     try {
