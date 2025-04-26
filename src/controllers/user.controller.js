@@ -6,11 +6,7 @@ const jwt = require("jsonwebtoken")
 const uploadProfileImageOnCloudinary = require("../utils/cloudinary.js")
 const {mongoose,isValidObjectId} = require("mongoose")
 
-const options = {
-    httpOnly:true,
-    secure:false,
-    maxAge:7*24*60*60*1000
-}
+
 const genereateRefreshAndAccessToken = async (userId)=>{
     try {
         const user = await User.findById(userId)
@@ -82,7 +78,11 @@ const loginUser = asyncHandler(async (req,res)=>{
     const{refreshToken,accessToken} =await genereateRefreshAndAccessToken(user._id)
 
     const loggedInUser = await User.findById(user._id).select("-password -refreshToken")
-  
+    const options = {
+    httpOnly:true,
+    secure:false,
+    maxAge:7*24*60*60*1000
+}
     return res
         .status(200)
         .cookie("accessToken",accessToken,options)
@@ -161,7 +161,11 @@ try {
             throw new ApiError(500,"refreshToken expired")
         }
         const {accessToken,refreshToken} = await genereateRefreshAndAccessToken(user._id)
-        
+        const options = {
+        httpOnly:true,
+        secure:false,
+        maxAge:7*24*60*60*1000
+}
     
         return res
         .status(200)
