@@ -6,7 +6,7 @@ const razorpayInstance = require('../utils/razorpay')
 
 const createOrder = asyncHandler(async (req,res)=>{
     let{courseId,amount} = req.body;
-  
+
     
     const options={
         amount: amount*100,

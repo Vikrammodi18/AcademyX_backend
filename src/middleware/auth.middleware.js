@@ -4,9 +4,9 @@ const ApiError = require("../utils/apiError")
 const User = require("../models/user.model")
 
 const verifyJWT = asyncHandler(async (req,res,next)=>{
+   
    const token = req.cookies?.accessToken
 
- 
    if(!token){
     throw new ApiError(403,"unauthorised access")
    }
@@ -16,6 +16,7 @@ const verifyJWT = asyncHandler(async (req,res,next)=>{
    if(!user){
     throw new ApiError(403,"invalid token")
    }
+   
 //    console.log(user)
    req.user = user
    next()

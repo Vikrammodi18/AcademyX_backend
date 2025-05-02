@@ -19,7 +19,7 @@ const userEnrolledCourse = asyncHandler(async (req,res)=>{
         return res
         .status(200)
         .json(
-            new ApiResponse(200,user,"you have not any courses")
+            new ApiResponse(200,[user],"you have not any courses")
         )
         
     }
@@ -65,7 +65,11 @@ const userEnrolledCourse = asyncHandler(async (req,res)=>{
        }
        
     ])
-    res.send(enrolledCourse)
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(200,enrolledCourse,"all data fetched with enrollement")
+    )
 
 })
 
