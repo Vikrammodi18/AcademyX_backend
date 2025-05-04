@@ -18,10 +18,13 @@ const lessonRouter = require("./routes/lesson.route.js")
 const enrollmentRouter = require("./routes/enrollment.route.js")
 const dashboardRouter = require("./routes/dashboard.route.js")
 const paymentRouter = require("../src/routes/razorpayPayment.route.js")
+
+const likeRouter = require("../src/routes/like.route.js")
 app.use("/api/v1/users",userRouter)
 app.use("/api/v1/courses",courseRouter)
 app.use("/api/v1/lessons",lessonRouter)
 app.use("/api/v1/enrollments",enrollmentRouter)
 app.use("/api/v1/dashboards",dashboardRouter)
 app.use("/api/v1/payments",paymentRouter)
+app.use("/api/v1/likes",likeRouter)
 module.exports = app
