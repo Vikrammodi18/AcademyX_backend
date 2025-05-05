@@ -16,7 +16,7 @@ const userSchema = new Schema({
     },
     bio:{
         type:String,
-        
+
     },
     email:{
         type:String,
@@ -27,6 +27,9 @@ const userSchema = new Schema({
     },
     profileImage:{
         type:String, // image url
+    },
+    coverImage:{
+        type:String,
     },
     password:{
         type:String,

@@ -14,7 +14,7 @@ const userEnrolledCourse = asyncHandler(async (req,res)=>{
     }
     const enrolled = await Enrollment.findOne({student: userId})
     if(!enrolled){
-        const user = await User.findById(new mongoose.Types.ObjectId(userId)).select("username profileImage email")
+        const user = await User.findById(new mongoose.Types.ObjectId(userId)).select("-password -refreshToken")
 
         return res
         .status(200)
@@ -61,6 +61,8 @@ const userEnrolledCourse = asyncHandler(async (req,res)=>{
             username:1,
             email:1,
             profileImage:1,
+            fullname:1,
+            bio:1,
             courses:1,
         }
        }

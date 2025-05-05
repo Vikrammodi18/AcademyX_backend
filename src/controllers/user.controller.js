@@ -218,7 +218,24 @@ const changePassword = asyncHandler(async (req,res)=>{
     )
     
 })
-
+const updateProfile = asyncHandler(async(req,res)=>{
+    const {fullname,bio} = req.body
+    if([fullname,bio].some((val)=> !val || val.trim()==="")){
+        throw new ApiError(400,"fullname and bio required")
+    }
+    const updateProfile = await User.findByIdAndUpdate({_id:req.user?._id},{
+        $set:{
+            fullname,
+            bio
+        }
+    },
+    {new:true})
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(200,updateProfile,"fullname,bio updated successfully")
+    )
+})
 module.exports = {
     registerUser,
     loginUser,
@@ -226,4 +243,5 @@ module.exports = {
     uploadProfileImage,
     refreshAccessToken,
     changePassword,
+    updateProfile
 }
