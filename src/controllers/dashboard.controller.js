@@ -60,6 +60,7 @@ const userEnrolledCourse = asyncHandler(async (req,res)=>{
         $project:{
             username:1,
             email:1,
+            profileImage:1,
             courses:1,
         }
        }

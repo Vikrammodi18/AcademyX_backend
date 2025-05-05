@@ -9,6 +9,15 @@ const userSchema = new Schema({
         lowercase:true,
         trim:true
     },
+    fullname:{
+        type:String,
+        trim:true,
+
+    },
+    bio:{
+        type:String,
+        
+    },
     email:{
         type:String,
         required:true,
