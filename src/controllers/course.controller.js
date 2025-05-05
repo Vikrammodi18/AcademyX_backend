@@ -225,6 +225,15 @@ const courseCategory = asyncHandler(async(req,res)=>{
         new ApiResponse(200,course,`${category}:fetched successfully`)
     )
 })
+const freeCourses = asyncHandler(async(req,res)=>{
+    
+    const freeCourseList = await Course.find({price:0})
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(200,freeCourseList,"All free courses")
+    )
+})
 module.exports = {
     createCourse,
     updateCourse,
@@ -232,5 +241,6 @@ module.exports = {
     getAllCourse,
     getCourseById,
     courseCategory,
-    listOfCourseCategory
+    listOfCourseCategory,
+    freeCourses
 }

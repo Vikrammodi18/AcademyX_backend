@@ -8,12 +8,14 @@ const {
     getAllCourse,
     getCourseById,
     courseCategory,
-    listOfCourseCategory
+    listOfCourseCategory,
+    freeCourses
 } = require("../controllers/course.controller")
 const router = Router()
 
 router.route("/").get(courseCategory)
 router.route('/listCategory').get(listOfCourseCategory)
+router.route("/getFree").get(freeCourses)
 router.route("/allCourses").get(getAllCourse)
 router.route("/:courseId").get(getCourseById)
 
