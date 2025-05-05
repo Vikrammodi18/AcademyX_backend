@@ -7,15 +7,18 @@ const {
     updateThumbnail,
     getAllCourse,
     getCourseById,
-    courseCategory
+    courseCategory,
+    listOfCourseCategory
 } = require("../controllers/course.controller")
 const router = Router()
 
 router.route("/").get(courseCategory)
+router.route('/listCategory').get(listOfCourseCategory)
 router.route("/allCourses").get(getAllCourse)
 router.route("/:courseId").get(getCourseById)
 
 router.route("/createCourse").post(verifyJWT,upload.single("thumbnail"),createCourse)
 router.route("/:courseId/updateCourse").post(verifyJWT,updateCourse)
 router.route("/:courseId/updateThumbnail").post(verifyJWT,upload.single("thumbnail"),updateThumbnail)
+
 module.exports = router

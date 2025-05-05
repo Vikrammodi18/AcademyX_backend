@@ -173,8 +173,36 @@ const getCourseById = asyncHandler(async (req,res)=>{
         new ApiResponse(200,course,"successfully")
     )
 })
+//get course category
+const listOfCourseCategory = asyncHandler(async(req,res)=>{
+    
+    let categories = [
+        "Artificial Intelligence",
+        "Web Development",
+        "App Development",
+        "Software Development",
+        "Language",
+        "Game Development",
+        "Programming Languages",
+        "Graphic Design",
+        "UI/UX Design",
+        "Video Editing",
+        "Cybersecurity",
+        "Cloud Computing",
+        "Data Science",
+        "DevOps",
+        "Digital Marketing",
+        "Blockchain Technology",
+    ]
+    return res
+    .status(200)
+    .json(
+        {categories}
+    )
+})
 //getting course by category
 const courseCategory = asyncHandler(async(req,res)=>{
+    
     const {category} = req.query;
    
     const course = await Course.find({category:category})
@@ -203,5 +231,6 @@ module.exports = {
     updateThumbnail,
     getAllCourse,
     getCourseById,
-    courseCategory
+    courseCategory,
+    listOfCourseCategory
 }

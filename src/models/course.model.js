@@ -36,7 +36,27 @@ const courseSchema = new Schema({
     content:[{
         type:mongoose.Schema.Types.ObjectId,
         ref:"Lesson"
-    }]
+    }],
+    taqs:{
+        type:[String],
+        lowercase:true,
+        validate:{
+            validator:function(v){
+                return v.length<=10
+            },
+            message:"a course can have atmost 10 taqs"
+        },
+        default:[]
+    },
+    likes:{
+        type:Number,
+        default:0,
+    },
+    enrollements:{
+        type:Number,
+        default:0,
+    }
+
 },{timestamps:true})
 
 const Course = mongoose.model("Course",courseSchema)
