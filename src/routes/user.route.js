@@ -8,11 +8,13 @@ const {
     uploadProfileImage,
     refreshAccessToken,
     changePassword,
-    updateProfile
+    updateProfile,
+    uploadCoverImage
 } = require("../controllers/user.controller.js")
 const { verifyJWT } = require('../middleware/auth.middleware.js')
 
 router.route("/updateProfile").put(verifyJWT,updateProfile)
+router.route("/updateCoverImage").post(verifyJWT,upload.single("coverImage"),uploadCoverImage)
 router.route("/register").post(registerUser)
 router.route("/login").post(loginUser)
 router.route("/logout").get(verifyJWT,logoutUser)

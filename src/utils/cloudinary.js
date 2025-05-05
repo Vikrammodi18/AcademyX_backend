@@ -9,6 +9,7 @@ const cloudinary = require("cloudinary").v2
         api_secret: process.env.API_SECRET // Click 'View API Keys' above to copy your API secret
     });
     const uploadProfileImageOnCloudinary = async(localPath)=>{
+        console.log("uploadProfileImageOnCloudinary",localPath)
         // Upload an image
        try {
          if(!localPath) return null

@@ -3,7 +3,7 @@ const ApiResponse = require("../utils/apiResponse.js")
 const asyncHandler = require("../utils/asyncHandler.js")
 const User = require("../models/user.model.js")
 const jwt = require("jsonwebtoken")
-const uploadProfileImageOnCloudinary = require("../utils/cloudinary.js")
+const {uploadProfileImageOnCloudinary} = require("../utils/cloudinary.js")
 const {mongoose,isValidObjectId} = require("mongoose")
 
 
@@ -137,7 +137,7 @@ const logoutUser = asyncHandler(async (req,res)=>{
     
 })
 const uploadProfileImage = asyncHandler(async (req,res)=>{
-   console.log(req.file?.path)
+   
    if(!req.file?.path){
     throw new ApiError(400,"file path is required!")
    }
@@ -236,6 +236,29 @@ const updateProfile = asyncHandler(async(req,res)=>{
         new ApiResponse(200,updateProfile,"fullname,bio updated successfully")
     )
 })
+const uploadCoverImage = asyncHandler(async(req,res)=>{
+    const imagePath = req?.file?.path
+    if(!imagePath){
+        throw new ApiError(400,"image path not found")
+    }
+    const response = await uploadProfileImageOnCloudinary(imagePath)
+    if(!response){
+        throw new ApiError(405,"something went wrong while uploading cover image")
+    }
+    const responseCoverImage = await User.findByIdAndUpdate({_id:req.user?._id},
+        {
+            $set:{
+                coverImage:response.url
+            }
+        },
+        {new:true}
+    )
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(200,responseCoverImage,"coverimage uploaed successfully!!")
+    )
+})
 module.exports = {
     registerUser,
     loginUser,
@@ -243,5 +266,6 @@ module.exports = {
     uploadProfileImage,
     refreshAccessToken,
     changePassword,
-    updateProfile
+    updateProfile,
+    uploadCoverImage
 }

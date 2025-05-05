@@ -64,6 +64,7 @@ const userEnrolledCourse = asyncHandler(async (req,res)=>{
             fullname:1,
             bio:1,
             courses:1,
+            coverImage:1,
         }
        }
        
