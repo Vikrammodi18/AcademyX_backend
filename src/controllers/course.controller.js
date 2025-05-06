@@ -6,7 +6,7 @@ const {uploadProfileImageOnCloudinary} = require("../utils/cloudinary");
 const {mongoose,isValidObjectId}= require("mongoose")
 
 const createCourse = asyncHandler(async (req,res)=>{
-    const{courseName,description,price,duration,category} = req.body
+    const{courseName,description,price,duration,category,taqs} = req.body
     if([courseName,description,price,duration,category].some((field)=> !field || field.trim()==="")){
         throw new ApiError(402,"courseName,description,price,duration,category are required")
     }
@@ -18,11 +18,24 @@ const createCourse = asyncHandler(async (req,res)=>{
    if(!thumbnailPath){
     throw new ApiError(400,"file path are required!")
    }
+   //validate and refine taqs for consistency
+   let processedTaqs = []
+   if(taqs){
+    if(! Array.isArraya(taqs)){
+        throw new ApiError(400,"taq must be array")
+    }
+    if(taqs.length>10){
+        throw new ApiError(400,"a course have at most 10 taqs")
+    }
+}
+    
+    processedTaqs = taqs.map((taq)=> taq.trim().toLowerCase())
    const response = await uploadProfileImageOnCloudinary(thumbnailPath)
    
    if(!response){
     throw new ApiError(500,"unable to upload thumbnail!")
    }
+   
     const course = await Course.create(
         {
             courseName:courseName.trim(),
@@ -32,6 +45,7 @@ const createCourse = asyncHandler(async (req,res)=>{
             category:category.trim(),
             educator:req.user?._id,
             duration,
+            processedTaqs
         }
 )
     if(!course){
@@ -49,9 +63,9 @@ const updateCourse = asyncHandler(async (req,res)=>{
     if(!isValidObjectId(courseId)){
         throw new ApiError(400,"enter valid Course Id")
     }
-    const{courseName,description,price,duration,category} = req.body
+    const{courseName,title,description,price,duration,category} = req.body
 
-    if([courseName,description,price,duration,category].some((field)=> !field || field.trim()==="")){
+    if([courseName,title,description,price,duration,category].some((field)=> !field || field.trim()==="")){
         throw new ApiError(400,"send valid data or fields cannot be empty")
     }
     if(price<0 || parseInt(price) < 0){
@@ -67,6 +81,7 @@ const updateCourse = asyncHandler(async (req,res)=>{
             courseName : courseName.trim(),
             description: description.trim(),
             price,
+            title,
             duration:duration.trim(),
             category:category.trim()
         },
@@ -78,6 +93,8 @@ const updateCourse = asyncHandler(async (req,res)=>{
         new ApiResponse(200,updatedCourse,"course updated successfully")
     )
 })
+
+//update thumbnail
 const updateThumbnail = asyncHandler(async (req,res)=>{
     const{courseId} = req.params
     if(isValidObjectId(courseId)){
