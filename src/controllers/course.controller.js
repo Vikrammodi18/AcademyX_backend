@@ -6,7 +6,7 @@ const {uploadProfileImageOnCloudinary} = require("../utils/cloudinary");
 const {mongoose,isValidObjectId}= require("mongoose")
 
 const createCourse = asyncHandler(async (req,res)=>{
-    const{courseName,description,price,duration,category,taqs} = req.body
+    const{courseName,description,title,price,duration,category,taqs} = req.body
     if([courseName,description,price,duration,category].some((field)=> !field || field.trim()==="")){
         throw new ApiError(402,"courseName,description,price,duration,category are required")
     }
@@ -44,6 +44,7 @@ const createCourse = asyncHandler(async (req,res)=>{
             thumbnail:response?.url,
             category:category.trim(),
             educator:req.user?._id,
+            title,
             duration,
             processedTaqs
         }
