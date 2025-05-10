@@ -23,6 +23,9 @@ const lessonSchema = new Schema({
         required:true,
         trim:true,
     },
+    details:{
+        type:String
+    },
     video:[{
         type: Schema.Types.ObjectId, 
         ref:"Video"

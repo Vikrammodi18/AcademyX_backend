@@ -8,14 +8,14 @@ const Course = require("../models/course.model");
 
 const createLesson = asyncHandler(async (req,res)=>{
     const {courseId} = req.params
-    const{lessonTitle,videoTitle} = req.body;
+    const{lessonTitle,detials,videoTitle} = req.body;
     
-    if([lessonTitle,videoTitle].some((field)=> !field || field.trim()===""))
+    if([lessonTitle,videoTitle,detials].some((field)=> !field || field.trim()===""))
     if(!isValidObjectId(courseId)){ 
         throw new ApiError(400,"Invalid course Id");
     }
     const videoPath =  req.file?.path
-    console.log("multer:",req.file?.path)
+   
     if(!videoPath){
         throw new ApiError(400,"your video did not upload! try again")
     }
@@ -42,6 +42,7 @@ const createLesson = asyncHandler(async (req,res)=>{
     const lesson = await Lesson.create({
         course: new mongoose.Types.ObjectId(courseId),
         title:lessonTitle.trim(),
+        details,
         video:[video._id]
     })
     if(!lesson){
