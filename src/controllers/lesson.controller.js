@@ -6,56 +6,67 @@ const { Lesson, Video } = require("../models/lesson.model");
 const ApiResponse = require("../utils/apiResponse");
 const Course = require("../models/course.model");
 
-const createLesson = asyncHandler(async (req,res)=>{
-    const {courseId} = req.params
-    const{lessonTitle,detials,videoTitle} = req.body;
-    
-    if([lessonTitle,videoTitle,detials].some((field)=> !field || field.trim()===""))
-    if(!isValidObjectId(courseId)){ 
-        throw new ApiError(400,"Invalid course Id");
-    }
-    const videoPath =  req.file?.path
-   
-    if(!videoPath){
-        throw new ApiError(400,"your video did not upload! try again")
-    }
-   
-    
-    const course = await Course.findById(new mongoose.Types.ObjectId(courseId))
-    
-    if(!course.educator.equals(req.user?._id)){
-        throw new ApiError(403,"you are not owner of this course")
-    }
-    const response = await uploadVideoOnCloudinary(videoPath)
-    
-    if(!response){
-        throw new ApiError(400,"did not get response")
-    }
-    const video = await Video.create({
-        videoTitle: videoTitle,
-        videoUrl: response.url
-    })
-    if(!video){
-        throw new ApiError(500,"video section not created:")
-    }
-    
-    const lesson = await Lesson.create({
-        course: new mongoose.Types.ObjectId(courseId),
-        title:lessonTitle.trim(),
-        details,
-        video:[video._id]
-    })
-    if(!lesson){
-        throw new ApiError(500,"lesson did not created:")
-    }
-    course.content.push(lesson._id)
-    await course.save()
-    return res
-    .status(200)
-    .json(
-        new ApiResponse(200,lesson,"lesson is created with video upload")
-    )
-})
+const createLesson = asyncHandler(async (req, res) => {
+  const { courseId } = req.params;
+  const { lessonTitle, details, videoTitle } = req.body;
+
+  // Only lessonTitle and videoTitle are required (and must be non-empty strings)
+  if (![lessonTitle, videoTitle].every(field => field && field.trim() !== "")) {
+    throw new ApiError(400, "lessonTitle and videoTitle are required");
+  }
+
+  if (!isValidObjectId(courseId)) {
+    throw new ApiError(400, "Invalid course Id");
+  }
+
+  const videoPath = req.file?.path;
+  if (!videoPath) {
+    throw new ApiError(400, "Your video did not upload! Try again.");
+  }
+
+  const course = await Course.findById(courseId);
+  if (!course) {
+    throw new ApiError(404, "Course not found");
+  }
+
+  if (!course.educator.equals(req.user?._id)) {
+    throw new ApiError(403, "You are not the owner of this course");
+  }
+
+  const response = await uploadVideoOnCloudinary(videoPath);
+  if (!response) {
+    throw new ApiError(400, "Video upload failed");
+  }
+
+  const video = await Video.create({
+    videoTitle: videoTitle.trim(),
+    videoUrl: response.url,
+  });
+
+  if (!video) {
+    throw new ApiError(500, "Video creation failed");
+  }
+
+  const lesson = await Lesson.create({
+    course: course._id,
+    title: lessonTitle.trim(),
+    details: details?.trim() || "", // Optional
+    video: [video._id],
+  });
+
+  if (!lesson) {
+    throw new ApiError(500, "Lesson creation failed");
+  }
+
+  course.content.push(lesson._id);
+  await course.save();
+
+  return res.status(200).json(
+    new ApiResponse(200, lesson, "Lesson created with video upload")
+  );
+});
+
+
 
 const addVideoLesson = asyncHandler(async(req,res)=>{
     //get courseId,lessonId
@@ -209,8 +220,7 @@ const deleteLessonById = asyncHandler(async(req,res)=>{
     
     const lesson = await Lesson.findById(lessonId)
    
-    if(lesson.video.length !== 0)
-        throw new ApiError(405,"can not delete whole lesson, It contain video")
+ 
     const deletedLesson = await Lesson.findByIdAndDelete(lessonId)
     course.content = course.content.filter((id)=> id.toString() !== lessonId)
     await course.save()

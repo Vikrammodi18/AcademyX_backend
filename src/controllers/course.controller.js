@@ -21,7 +21,7 @@ const createCourse = asyncHandler(async (req,res)=>{
    //validate and refine taqs for consistency
    let processedTaqs = []
    if(taqs){
-    if(! Array.isArraya(taqs)){
+    if(! Array.isArray(taqs)){
         throw new ApiError(400,"taq must be array")
     }
     if(taqs.length>10){

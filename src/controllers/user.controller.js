@@ -220,14 +220,13 @@ const changePassword = asyncHandler(async (req,res)=>{
 })
 const updateProfile = asyncHandler(async(req,res)=>{
     const {fullname,bio} = req.body
-    if([fullname,bio].some((val)=> !val || val.trim()==="")){
-        throw new ApiError(400,"fullname and bio required")
-    }
+    
+    // if([fullname,bio].some((val)=> !val || val.trim()==="")){
+    //     throw new ApiError(400,"fullname and bio required")
+    // }
     const updateProfile = await User.findByIdAndUpdate({_id:req.user?._id},{
-        $set:{
-            fullname,
-            bio
-        }
+       ...(bio &&{bio}),
+       ...(fullname &&{fullname})
     },
     {new:true})
     return res
