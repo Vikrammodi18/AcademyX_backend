@@ -84,6 +84,7 @@ const loginUser = asyncHandler(async (req,res)=>{
     httpOnly:true,
     // secure:process.env.NODE_ENV === "production",
     secure:true,
+    sameSite:none,
     maxAge:7*24*60*60*1000
 }
     return res
@@ -120,7 +121,8 @@ const logoutUser = asyncHandler(async (req,res)=>{
         
         // secure:process.env.NODE_ENV === "production",
         secure:true,
-        // maxAge:7*24*60*60*1000
+        sameSite:none,
+        maxAge:7*24*60*60*1000
     }
     return res
     .status(200)
@@ -173,6 +175,7 @@ try {
         const options = {
         httpOnly:true,
         secure:true,
+        sameSite:none,
         maxAge:7*24*60*60*1000
 }
     
