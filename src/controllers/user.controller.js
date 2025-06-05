@@ -84,7 +84,7 @@ const loginUser = asyncHandler(async (req,res)=>{
     httpOnly:true,
     sameSite: "Lax",
     // secure:process.env.NODE_ENV === "production",
-    secure:false,
+    secure:true,
     maxAge:7*24*60*60*1000
 }
     return res
@@ -120,7 +120,7 @@ const logoutUser = asyncHandler(async (req,res)=>{
         httpOnly:true,
         sameSite: "Lax",
         // secure:process.env.NODE_ENV === "production",
-        secure:false,
+        secure:true,
         // maxAge:7*24*60*60*1000
     }
     return res
@@ -173,7 +173,7 @@ try {
         const {accessToken,refreshToken} = await genereateRefreshAndAccessToken(user._id)
         const options = {
         httpOnly:true,
-        secure:false,
+        secure:true,
         maxAge:7*24*60*60*1000
 }
     
