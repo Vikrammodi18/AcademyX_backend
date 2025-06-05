@@ -66,6 +66,7 @@ const loginUser = asyncHandler(async (req,res)=>{
     //user logged in
     //some iterator return true if atleast one condition is true
     const {email,password} = req.body
+    console.log(email,password)
     if([email,password].some((field)=> !field || field.trim()==="")){
         throw new ApiError(400,"email or password can not be empty")
     }
